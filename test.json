@@ -1,0 +1,15 @@
+{
+  "session":
+  {
+    "name": "testSession8",
+    "durationInMinutes":225,
+    "userId":1
+  },
+  "sessionWorkouts":
+  {
+    "sessionId":2,
+    "workoutId":1,
+    "reps":120,
+    "weight":205
+  }
+}
