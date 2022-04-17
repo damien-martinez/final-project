@@ -12,7 +12,7 @@ export default class RenderExercises extends React.Component {
   }
 
   appendSetCounter() {
-    const newArray = this.state.setCounter;
+    const newArray = this.state.setCounter.slice();
     newArray.push(0);
     this.setState({ setCounter: newArray });
   }

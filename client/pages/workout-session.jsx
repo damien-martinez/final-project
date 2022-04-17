@@ -15,7 +15,7 @@ export default class WorkoutSession extends React.Component {
 
   appendWorkoutList(value) {
 
-    const newWorkoutList = this.state.workoutList;
+    const newWorkoutList = this.state.workoutList.slice();
     newWorkoutList.push(value);
     this.setState({ workoutList: newWorkoutList });
   }
