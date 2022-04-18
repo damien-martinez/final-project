@@ -23,9 +23,11 @@ export default class RenderSet extends React.Component {
   render() {
     return (
       <>
-      <div className="mt-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">Set:</label>
-          <p>{this.state.setNumber + 1}</p>
+      <div className="mt-3 row">
+        <div className='col-2 d-flex h6'>
+            <label htmlFor="exampleFormControlInput1" className="form-label pe-2">Set: </label>
+            <p>{this.state.setNumber + 1}</p>
+        </div>
         </div>
         <div className='row'>
           <div className="col-6">

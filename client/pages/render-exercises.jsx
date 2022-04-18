@@ -20,12 +20,12 @@ export default class RenderExercises extends React.Component {
   render() {
     return (
       <>
-        <h4 className='mt-4 mb-4'>{this.props.workoutName}</h4>
+        <h4 className='mt-2 mb-2'>{this.props.workoutName}</h4>
         {
         this.state.setCounter.map((counter, index) => (<RenderSet key={index} setNumber={index} />))
         }
 
-        <button onClick={this.appendSetCounter} type='button' className='btn btn-primary btn-sm mt-3'>Add Set</button>
+        <button onClick={this.appendSetCounter} type='button' className='btn btn-primary btn-sm mt-2'>Add Set</button>
 
       </>
     );
