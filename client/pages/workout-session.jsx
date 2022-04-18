@@ -1,6 +1,7 @@
 import React from 'react';
 import RenderExercises from './render-exercises';
 import ModalButton from './modal-button';
+import Timer from './timer';
 
 export default class WorkoutSession extends React.Component {
   constructor(props) {
@@ -31,7 +32,8 @@ export default class WorkoutSession extends React.Component {
           </div>
 
             <div className='col-6'>
-              <p className='text-end'>0:00</p>
+
+              <Timer />
               <div className='d-flex justify-content-end'>
                   <button type='button' className='btn btn-primary btn-md'>Finish</button>
                   <button type='button' className='btn btn-primary btn-md ms-4'>Cancel</button>
