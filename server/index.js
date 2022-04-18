@@ -21,27 +21,6 @@ app.use(jsonMiddleware);
 
 app.use(staticMiddleware);
 
-// app.post('/api/add-session', (req,res,next) => {
-//   const {name, durationInMinutes, userId} = req.body
-//   if (!name || !durationInMinutes || !userId){
-//     throw new ClientError(401, 'missing info')
-//   }
-//   const sql = `
-//   insert into "session" ("name", "durationInMinutes", "userId")
-//   values ($1,$2,$3)
-//   returning *
-//   `
-//   const params = [name, durationInMinutes, userId]
-//   db.query(sql, params)
-//     .then(result => {
-//       console.log(result)
-//       const [name] = result.rows;
-//       res.status(201).json(name)
-//     })
-//     .catch(err => next(err))
-
-// })
-
 app.get('/api/get-workouts', (req, res, next) => {
   const sql = `
   select *
@@ -55,12 +34,11 @@ app.get('/api/get-workouts', (req, res, next) => {
 
 });
 
-app.post('/api/add-session-and-session-workouts', (req, res, next) => {
+app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   // console.log(req.body);
   const { name, durationInMinutes, userId } = req.body.session;
-  const { sessionId, workoutId, reps, weight } = req.body.sessionWorkouts;
 
-  if (!name || !durationInMinutes || !userId || !sessionId || !workoutId || !reps || !weight) {
+  if (!name || !durationInMinutes || !userId) {
     throw new ClientError(401, 'missing info');
   }
   const sqlSession = `
@@ -71,18 +49,23 @@ app.post('/api/add-session-and-session-workouts', (req, res, next) => {
   const paramsSession = [name, durationInMinutes, userId];
   db.query(sqlSession, paramsSession)
     .then(result => {
-      const sqlSessionWorkouts = `
-  insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight")
-  values ($1,$2,$3,$4)
-  returning *
-  `;
-      const paramsSessionWorkouts = [sessionId, workoutId, reps, weight];
-      db.query(sqlSessionWorkouts, paramsSessionWorkouts)
-        .then(result => {
+      for (let i = 0; i < req.body.sessionWorkouts.length; i++) {
+        const { sessionId, workoutId, reps, weight, set } = req.body.sessionWorkouts[i];
+        if (!sessionId || !workoutId || !reps || !weight || !set) {
+          throw new ClientError(401, 'missing info');
+        }
+        const sqlSessionWorkouts = `
+        insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight", "set")
+        values ($1,$2,$3,$4, $5)
+        returning *
+        `;
+        const paramsSessionWorkouts = [sessionId, workoutId, reps, weight, set];
+        db.query(sqlSessionWorkouts, paramsSessionWorkouts)
+          .then(result => {
 
-          res.status(201).json({ message: 'Successfully saved session and session info' });
-        })
-        .catch(err => next(err));
+          })
+          .catch(err => next(err));
+      } res.status(201).json({ message: 'Successfully saved session and session info' });
     })
     .catch(err => next(err));
 

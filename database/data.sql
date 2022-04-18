@@ -29,14 +29,16 @@ insert into "sessionWorkouts" (
   "sessionId",
   "workoutId",
   "reps",
-  "weight"
+  "weight",
+  "set"
 ) values (
   1,
   1,
   8,
-  165),
+  165,
+  1),
   (1,
   2,
   12,
-  115
-  );
+  115,
+  2);
