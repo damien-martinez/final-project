@@ -1,5 +1,6 @@
 // import 'bootstrap/dist/css/bootstrap.min.css';
 require('dotenv/config');
+const format = require('pg-format');
 const pg = require('pg');
 const express = require('express');
 const ClientError = require('./client-error');
@@ -37,35 +38,51 @@ app.get('/api/get-workouts', (req, res, next) => {
 app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   // console.log(req.body);
   const { name, durationInMinutes, userId } = req.body.session;
+  const myNestedArray = [];
+
+  for (let i = 0; req.body.sessionWorkouts[i]; i++) {
+    const { sessionId, workoutId, reps, weight, set } = req.body.sessionWorkouts[i];
+    if (!sessionId || !workoutId || !reps || !weight || !set) {
+      throw new ClientError(400, 'Missing required info, please check to see if there is data for sessionId, workoutId, reps, weight, and set');
+    }
+    let array = [];
+    for (const property in req.body.sessionWorkouts[i]) {
+
+      array.push(req.body.sessionWorkouts[i][property]);
+
+    }
+
+    myNestedArray.push(array);
+    array = [];
+
+  }
 
   if (!name || !durationInMinutes || !userId) {
-    throw new ClientError(401, 'missing info');
+    throw new ClientError(400, 'Missing required info. please check to if there is data for name, durationInMinutes, and userId');
   }
   const sqlSession = `
   insert into "session" ("name", "durationInMinutes", "userId")
   values ($1,$2,$3)
   returning *
   `;
+
   const paramsSession = [name, durationInMinutes, userId];
   db.query(sqlSession, paramsSession)
     .then(result => {
-      for (let i = 0; i < req.body.sessionWorkouts.length; i++) {
-        const { sessionId, workoutId, reps, weight, set } = req.body.sessionWorkouts[i];
-        if (!sessionId || !workoutId || !reps || !weight || !set) {
-          throw new ClientError(401, 'missing info');
-        }
-        const sqlSessionWorkouts = `
-        insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight", "set")
-        values ($1,$2,$3,$4, $5)
-        returning *
-        `;
-        const paramsSessionWorkouts = [sessionId, workoutId, reps, weight, set];
-        db.query(sqlSessionWorkouts, paramsSessionWorkouts)
-          .then(result => {
+      const sqlSessionWorkouts = format(`
+      insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight", "set")
+      values %L
+      `, myNestedArray);
 
-          })
-          .catch(err => next(err));
-      } res.status(201).json({ message: 'Successfully saved session and session info' });
+      // console.log('format', sqlSessionWorkouts);
+
+      db.query(sqlSessionWorkouts)
+        .then(result => {
+          res.status(201).json({ message: 'Successfully saved session and session info' });
+
+        })
+        .catch(err => next(err));
+
     })
     .catch(err => next(err));
 

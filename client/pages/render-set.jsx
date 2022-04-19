@@ -4,8 +4,10 @@ export default class RenderSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      setNumber: this.props.setNumber,
-      pounds: ''
+      setNumber: this.props.setNumber + 1,
+      pounds: '',
+      workoutName: this.props.workoutName,
+      reps: ''
     };
 
     this.handlePoundsChange = this.handlePoundsChange.bind(this);
@@ -26,7 +28,7 @@ export default class RenderSet extends React.Component {
       <div className="mt-3 row">
         <div className='col-2 d-flex h6'>
             <label htmlFor="exampleFormControlInput1" className="form-label pe-2">Set: </label>
-            <p>{this.state.setNumber + 1}</p>
+            <p>{this.state.setNumber}</p>
         </div>
         </div>
         <div className='row'>

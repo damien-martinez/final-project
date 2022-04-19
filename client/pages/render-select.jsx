@@ -27,6 +27,7 @@ export default class RenderSelect extends React.Component {
 
     this.setState({ selectedOption: e.target.value });
     this.props.grabWorkout(e.target.value);
+    // console.log('test', e.target);
 
   }
 

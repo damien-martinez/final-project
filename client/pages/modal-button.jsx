@@ -8,6 +8,7 @@ export default class ModalButton extends React.Component {
     this.state = {
       workoutName: null,
       modalShow: false
+      // workoutId: null
 
     };
 
@@ -30,6 +31,10 @@ export default class ModalButton extends React.Component {
 
   }
 
+  // grabWorkoutId(workoutId) {
+  //   this.setState({ workoutId: workoutId });
+  // }
+
   render() {
     return (
     <>
@@ -45,7 +50,7 @@ export default class ModalButton extends React.Component {
             <Modal.Title>Please Choose Your Next Workout</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <RenderSelect grabWorkout={this.grabWorkout}/>
+            <RenderSelect grabWorkout={this.grabWorkout} grabWorkoutId={this.grabWorkoutId}/>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
