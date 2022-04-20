@@ -1,21 +1,26 @@
 import React from 'react';
 
-export default class RenderSet extends React.Component {
+export default class WorkSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      setNumber: this.props.setNumber + 1,
-      pounds: '',
-      workoutName: this.props.workoutName,
-      reps: ''
+      weight: this.props.set.weight,
+      reps: this.props.set.reps
     };
-
-    this.handlePoundsChange = this.handlePoundsChange.bind(this);
+    this.handleWeightChange = this.handleWeightChange.bind(this);
     this.handleRepsChange = this.handleRepsChange.bind(this);
   }
 
-  handlePoundsChange(e) {
-    this.setState({ pounds: e.target.value });
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.weight === prevState.weight &&
+        this.state.reps === prevState.reps) {
+      return;
+    }
+    this.props.onSetUpdated(this.props.index, this.state);
+  }
+
+  handleWeightChange(e) {
+    this.setState({ weight: e.target.value });
   }
 
   handleRepsChange(e) {
@@ -28,13 +33,13 @@ export default class RenderSet extends React.Component {
       <div className="mt-3 row">
         <div className='col-2 d-flex h6'>
             <label htmlFor="exampleFormControlInput1" className="form-label pe-2">Set: </label>
-            <p>{this.state.setNumber}</p>
+            <p>{this.props.index + 1}</p>
         </div>
         </div>
         <div className='row'>
           <div className="col-6">
             <label htmlFor="exampleFormControlInput1" className="form-label">Pounds:</label>
-            <input value={this.state.pounds} onChange={this.handlePoundsChange} type="text" className="form-control" id="exampleFormControlInput1" placeholder=""/>
+            <input value={this.state.weight} onChange={this.handleWeightChange} type="text" className="form-control" id="exampleFormControlInput1" placeholder=""/>
           </div>
           <div className="col-6">
             <label htmlFor="exampleFormControlInput1" className="form-label">Reps:</label>
