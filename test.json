@@ -2,46 +2,41 @@
 
 {
   "session": {
-    "name": "testSession10",
+    "name": "testSession00",
     "durationInMinutes": 12623,
     "userId": 1
   },
   "sessionWorkouts":
   [
   {
-    "sessionId": 3,
-    "workoutId": 1,
-    "reps": 5,
-    "weight": 225,
-    "set": 1
+
+    "reps": "0",
+    "weight": "0",
+    "workoutId": 1
   },
   {
-    "sessionId": 3,
-    "workoutId": 1,
-    "reps": 6,
-    "weight": 235,
-    "set": 2
+
+    "reps": "0",
+    "weight": "0",
+    "workoutId": 1
   },
   {
-    "sessionId": 3,
-    "workoutId": 1,
-    "reps": 7,
-    "weight": 245,
-    "set": 3
+
+    "reps": "0",
+    "weight": "0",
+    "workoutId": 1
   },
   {
-    "sessionId": 3,
-    "workoutId": 2,
-    "reps": 10,
-    "weight": 180,
-    "set": 1
+
+    "reps": "0",
+    "weight": "0",
+    "workoutId": 2
   },
   {
-    "sessionId": 3,
-    "workoutId": 2,
-    "reps": 11,
-    "weight": 185,
-    "set": 2
+
+    "reps": "0",
+    "weight": "0",
+    "workoutId": 2
   }
 ]
 }

@@ -51,26 +51,37 @@ app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   db.query(sqlSession, paramsSession)
     .then(result => {
       const myNestedArray = [];
+      let set = 1;
 
       for (let i = 0; req.body.sessionWorkouts[i]; i++) {
+
         const { workoutId } = req.body.sessionWorkouts[i];
         if (!workoutId) {
           throw new ClientError(400, 'Missing workoutId, please check to see if there is data');
         }
         let array = [];
         array.push(result.rows[0].sessionId);
+
         for (const property in req.body.sessionWorkouts[i]) {
 
           array.push(req.body.sessionWorkouts[i][property]);
 
         }
 
+        if (i !== 0) {
+          if (req.body.sessionWorkouts[i].workoutId !== req.body.sessionWorkouts[i - 1].workoutId) {
+            set = 1;
+          }
+        }
+
+        array.push(set);
         myNestedArray.push(array);
         array = [];
+        set++;
 
       }
       const sqlSessionWorkouts = format(`
-      insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight", "set")
+      insert into "sessionWorkouts" ("sessionId", "reps", "weight", "workoutId", "set")
       values %L
       `, myNestedArray);
 
