@@ -8,11 +8,17 @@ export default class WorkoutSession extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      workouts: []
+      workouts: [],
+      sessionName: '',
+      sessionDuration: 0
     };
 
     this.addWorkout = this.addWorkout.bind(this);
     this.handleWorkoutUpdated = this.handleWorkoutUpdated.bind(this);
+    this.addSessionName = this.addSessionName.bind(this);
+    this.addSessionDuration = this.addSessionDuration.bind(this);
+    this.postRequest = this.postRequest.bind(this);
+
   }
 
   addWorkout(exercise) {
@@ -20,8 +26,8 @@ export default class WorkoutSession extends React.Component {
       exercise: exercise,
       sets: [{
         workoutId: exercise.workoutId,
-        weight: '',
-        reps: ''
+        weight: 0,
+        reps: 0
       }]
     };
     this.setState({
@@ -33,6 +39,55 @@ export default class WorkoutSession extends React.Component {
     const updatedWorkouts = this.state.workouts.slice();
     updatedWorkouts[index] = workoutData;
     this.setState({ workouts: updatedWorkouts });
+  }
+
+  addSessionDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    this.setState({ sessionDuration: minutes });
+
+  }
+
+  addSessionName(name) {
+    this.setState({ sessionName: name });
+  }
+
+  postRequest() {
+    const { workouts, sessionName, sessionDuration } = this.state;
+    // console.log('this.state.sessionName', sessionName);
+    const submitData = {
+
+      session: {
+        name: sessionName,
+        durationInMinutes: sessionDuration,
+        userId: 1
+      },
+      sessionWorkouts: []
+
+    };
+    let counter = 0;
+    for (let i = 0; i < workouts.length; i++) {
+      for (let j = 0; j < workouts[i].sets.length; j++) {
+        submitData.sessionWorkouts.push(workouts[i].sets[j]);
+        submitData.sessionWorkouts[counter].set = j + 1;
+
+        counter++;
+
+      }
+
+    }
+    // console.log(submitData);
+
+    fetch('api/add-session-and-session-workout-data',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submitData)
+      })
+      .then(res => {
+        res.json();
+        // console.log('res', res);
+      });
+
   }
 
   render() {
@@ -47,10 +102,10 @@ export default class WorkoutSession extends React.Component {
 
             <div className='col-6'>
 
-              <Timer />
+              <Timer addSessionDuration={this.addSessionDuration} />
               <div className='d-flex justify-content-end'>
-                  <FinishButton />
-                  <button onClick={this.addWorkoutSession} type='button' className='btn btn-primary btn-md ms-4'>Cancel</button>
+                  <FinishButton addSessionName={this.addSessionName} postRequest={this.postRequest} />
+                  <button type='button' className='btn btn-primary btn-md ms-4'>Cancel</button>
               </div>
           </div>
         </div>

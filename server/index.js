@@ -38,24 +38,6 @@ app.get('/api/get-workouts', (req, res, next) => {
 app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   // console.log(req.body);
   const { name, durationInMinutes, userId } = req.body.session;
-  const myNestedArray = [];
-
-  for (let i = 0; req.body.sessionWorkouts[i]; i++) {
-    const { sessionId, workoutId, reps, weight, set } = req.body.sessionWorkouts[i];
-    if (!sessionId || !workoutId || !reps || !weight || !set) {
-      throw new ClientError(400, 'Missing required info, please check to see if there is data for sessionId, workoutId, reps, weight, and set');
-    }
-    let array = [];
-    for (const property in req.body.sessionWorkouts[i]) {
-
-      array.push(req.body.sessionWorkouts[i][property]);
-
-    }
-
-    myNestedArray.push(array);
-    array = [];
-
-  }
 
   if (!name || !durationInMinutes || !userId) {
     throw new ClientError(400, 'Missing required info. please check to if there is data for name, durationInMinutes, and userId');
@@ -69,6 +51,27 @@ app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   const paramsSession = [name, durationInMinutes, userId];
   db.query(sqlSession, paramsSession)
     .then(result => {
+      // console.log('here is result row', result.rows[0].sessionId);
+      const myNestedArray = [];
+
+      for (let i = 0; req.body.sessionWorkouts[i]; i++) {
+        const { workoutId, reps, weight, set } = req.body.sessionWorkouts[i];
+        if (!workoutId || !reps || !weight || !set) {
+          throw new ClientError(400, 'Missing required info, please check to see if there is data for sessionId, workoutId, reps, weight, and set');
+        }
+        let array = [];
+        array.push(result.rows[0].sessionId);
+        for (const property in req.body.sessionWorkouts[i]) {
+
+          array.push(req.body.sessionWorkouts[i][property]);
+
+        }
+
+        myNestedArray.push(array);
+        array = [];
+
+      }
+      // console.log('nested array', myNestedArray);
       const sqlSessionWorkouts = format(`
       insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight", "set")
       values %L

@@ -4,7 +4,7 @@ export default class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      seconds: 11222,
+      seconds: 500,
       timerOn: true,
       timerId: null
     };
@@ -16,6 +16,7 @@ export default class Timer extends React.Component {
   componentDidMount() {
     const mountTimerId = setInterval(() => {
       this.setState({ seconds: this.state.seconds + 1 });
+      this.props.addSessionDuration(this.state.seconds);
     }, 1000);
 
     this.setState({ timerId: mountTimerId });
@@ -43,6 +44,7 @@ export default class Timer extends React.Component {
 
       const mountTimerId = setInterval(() => {
         this.setState({ seconds: this.state.seconds + 1 });
+        this.props.addSessionDuration(this.state.seconds);
       }, 1000);
 
       this.setState({ timerId: mountTimerId });

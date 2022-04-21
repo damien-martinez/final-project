@@ -38,10 +38,15 @@ export default class ModalButton extends React.Component {
   }
 
   handleSubmit(event) {
+
     const selectedWorkoutId = this.state.selectedOption;
     const chosenWorkout = this.state.workoutList.find(workout => {
       return workout.workoutId.toString() === selectedWorkoutId;
     });
+    if (this.state.selectedOption === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
     const workoutCopy = Object.assign({}, chosenWorkout);
     this.handleClose();
