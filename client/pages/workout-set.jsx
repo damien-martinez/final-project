@@ -39,11 +39,11 @@ export default class WorkSet extends React.Component {
         <div className='row'>
           <div className="col-6">
             <label htmlFor="exampleFormControlInput1" className="form-label">Pounds:</label>
-            <input value={this.state.weight} onChange={this.handleWeightChange} type="number" className="form-control" id="exampleFormControlInput1" placeholder=""/>
+            <input value={this.state.weight} onChange={this.handleWeightChange} type="number" className="form-control" id="exampleFormControlInput1" placeholder="" min="0" step="5"/>
           </div>
           <div className="col-6">
             <label htmlFor="exampleFormControlInput1" className="form-label">Reps:</label>
-            <input value={this.state.reps} onChange={this.handleRepsChange} type="number" className="form-control" id="exampleFormControlInput1" placeholder="" />
+            <input value={this.state.reps} onChange={this.handleRepsChange} type="number" className="form-control" id="exampleFormControlInput1" placeholder="" min="0" step="5"/>
           </div>
         </div>
       </>

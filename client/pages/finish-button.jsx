@@ -35,9 +35,8 @@ export default class FinishButton extends React.Component {
       return;
     }
     event.preventDefault();
-    this.props.addSessionName(this.state.sessionName);
     this.handleClose();
-    this.props.postRequest();
+    this.props.postRequest(this.state.sessionName);
 
   }
 

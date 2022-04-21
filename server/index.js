@@ -36,11 +36,10 @@ app.get('/api/get-workouts', (req, res, next) => {
 });
 
 app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
-  // console.log(req.body);
   const { name, durationInMinutes, userId } = req.body.session;
 
-  if (!name || !durationInMinutes || !userId) {
-    throw new ClientError(400, 'Missing required info. please check to if there is data for name, durationInMinutes, and userId');
+  if (!name || !userId) {
+    throw new ClientError(400, 'Missing required info. please check to if there is data for name or userId');
   }
   const sqlSession = `
   insert into "session" ("name", "durationInMinutes", "userId")
@@ -51,13 +50,12 @@ app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   const paramsSession = [name, durationInMinutes, userId];
   db.query(sqlSession, paramsSession)
     .then(result => {
-      // console.log('here is result row', result.rows[0].sessionId);
       const myNestedArray = [];
 
       for (let i = 0; req.body.sessionWorkouts[i]; i++) {
-        const { workoutId, reps, weight, set } = req.body.sessionWorkouts[i];
-        if (!workoutId || !reps || !weight || !set) {
-          throw new ClientError(400, 'Missing required info, please check to see if there is data for sessionId, workoutId, reps, weight, and set');
+        const { workoutId } = req.body.sessionWorkouts[i];
+        if (!workoutId) {
+          throw new ClientError(400, 'Missing workoutId, please check to see if there is data');
         }
         let array = [];
         array.push(result.rows[0].sessionId);
@@ -71,13 +69,10 @@ app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
         array = [];
 
       }
-      // console.log('nested array', myNestedArray);
       const sqlSessionWorkouts = format(`
       insert into "sessionWorkouts" ("sessionId", "workoutId", "reps", "weight", "set")
       values %L
       `, myNestedArray);
-
-      // console.log('format', sqlSessionWorkouts);
 
       db.query(sqlSessionWorkouts)
         .then(result => {

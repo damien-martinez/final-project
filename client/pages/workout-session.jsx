@@ -9,13 +9,11 @@ export default class WorkoutSession extends React.Component {
     super(props);
     this.state = {
       workouts: [],
-      sessionName: '',
       sessionDuration: 0
     };
 
     this.addWorkout = this.addWorkout.bind(this);
     this.handleWorkoutUpdated = this.handleWorkoutUpdated.bind(this);
-    this.addSessionName = this.addSessionName.bind(this);
     this.addSessionDuration = this.addSessionDuration.bind(this);
     this.postRequest = this.postRequest.bind(this);
 
@@ -26,8 +24,8 @@ export default class WorkoutSession extends React.Component {
       exercise: exercise,
       sets: [{
         workoutId: exercise.workoutId,
-        weight: 0,
-        reps: 0
+        weight: '0',
+        reps: '0'
       }]
     };
     this.setState({
@@ -47,17 +45,15 @@ export default class WorkoutSession extends React.Component {
 
   }
 
-  addSessionName(name) {
-    this.setState({ sessionName: name });
-  }
-
-  postRequest() {
-    const { workouts, sessionName, sessionDuration } = this.state;
-    // console.log('this.state.sessionName', sessionName);
+  postRequest(name) {
+    const { workouts, sessionDuration } = this.state;
+    if (this.state.workouts.length < 1) {
+      return;
+    }
     const submitData = {
 
       session: {
-        name: sessionName,
+        name: name,
         durationInMinutes: sessionDuration,
         userId: 1
       },
@@ -69,13 +65,22 @@ export default class WorkoutSession extends React.Component {
       for (let j = 0; j < workouts[i].sets.length; j++) {
         submitData.sessionWorkouts.push(workouts[i].sets[j]);
         submitData.sessionWorkouts[counter].set = j + 1;
+        if (submitData.sessionWorkouts[counter].reps < 0 || submitData.sessionWorkouts[counter].weight < 0) {
+          window.alert('Cannot have values that are negative. Please fix and try again.');
+          return;
+        }
+
+        if (submitData.sessionWorkouts[counter].reps === '' ||
+           submitData.sessionWorkouts[counter].weight === '') {
+          window.alert('Cannot have values that are blank. Please add numerical values.');
+          return;
+        }
 
         counter++;
 
       }
 
     }
-    // console.log(submitData);
 
     fetch('api/add-session-and-session-workout-data',
       {
@@ -85,8 +90,10 @@ export default class WorkoutSession extends React.Component {
       })
       .then(res => {
         res.json();
-        // console.log('res', res);
+
       });
+
+    this.setState({ workouts: [] });
 
   }
 
@@ -104,7 +111,7 @@ export default class WorkoutSession extends React.Component {
 
               <Timer addSessionDuration={this.addSessionDuration} />
               <div className='d-flex justify-content-end'>
-                  <FinishButton addSessionName={this.addSessionName} postRequest={this.postRequest} />
+                  <FinishButton postRequest={this.postRequest} />
                   <button type='button' className='btn btn-primary btn-md ms-4'>Cancel</button>
               </div>
           </div>
@@ -122,50 +129,3 @@ export default class WorkoutSession extends React.Component {
 
   }
 }
-
-// data: {
-//   session: {
-//     name: 'testSession10',
-//       durationInMinutes: 12623,
-//         userId: 1
-//   },
-//   sessionWorkouts:
-//   [
-//     {
-//       sessionId: 2,
-//       workoutId: 1,
-//       reps: 5,
-//       weight: 225,
-//       set: 1
-//     },
-//     {
-//       sessionId: 2,
-//       workoutId: 1,
-//       reps: 6,
-//       weight: 235,
-//       set: 2
-//     },
-//     {
-//       sessionId: 2,
-//       workoutId: 1,
-//       reps: 7,
-//       weight: 245,
-//       set: 3
-//     },
-//     {
-//       sessionId: 2,
-//       workoutId: 2,
-//       reps: 10,
-//       weight: 180,
-//       set: 1
-//     },
-//     {
-//       sessionId: 2,
-//       workoutId: 2,
-//       reps: 11,
-//       weight: 185,
-//       set: 2
-//     }
-//   ]
-// }
-//     };

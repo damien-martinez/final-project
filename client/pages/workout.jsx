@@ -25,8 +25,8 @@ export default class Workout extends React.Component {
   handleAddSet() {
     const newSet = {
       workoutId: this.props.workout.exercise.workoutId,
-      reps: 0,
-      weight: 0
+      reps: '0',
+      weight: '0'
     };
     this.handleSetUpdated(this.props.workout.sets.length, newSet);
   }
