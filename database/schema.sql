@@ -45,7 +45,8 @@ CREATE TABLE "public"."sessionWorkouts" (
 	"sessionId" int NOT NULL,
 	"workoutId" int NOT NULL,
 	"reps" int,
-	"weight" int
+	"weight" int,
+  "set" int NOT NULL
 ) WITH (
   OIDS=FALSE
 );

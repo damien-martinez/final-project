@@ -1,19 +1,27 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import RenderSelect from './render-select';
-
 export default class ModalButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      workoutName: null,
-      modalShow: false
-
+      modalShow: false,
+      selectedOption: '',
+      workoutList: []
     };
-
+    this.handleChange = this.handleChange.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.grabWorkout = this.grabWorkout.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    fetch('/api/get-workouts')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        this.setState({ workoutList: data });
+      });
 
   }
 
@@ -22,12 +30,27 @@ export default class ModalButton extends React.Component {
   }
 
   handleClose() {
-    this.setState({ modalShow: false });
+    this.setState({ modalShow: false, selectedOption: '' });
   }
 
-  grabWorkout(workout) {
-    this.setState({ workoutName: workout });
+  handleChange(e) {
+    this.setState({ selectedOption: e.target.value });
+  }
 
+  handleSubmit(event) {
+
+    const selectedWorkoutId = this.state.selectedOption;
+    const chosenWorkout = this.state.workoutList.find(workout => {
+      return workout.workoutId.toString() === selectedWorkoutId;
+    });
+    if (this.state.selectedOption === '') {
+      event.preventDefault();
+      return;
+    }
+    event.preventDefault();
+    const workoutCopy = Object.assign({}, chosenWorkout);
+    this.handleClose();
+    this.props.onSelection(workoutCopy);
   }
 
   render() {
@@ -45,13 +68,22 @@ export default class ModalButton extends React.Component {
             <Modal.Title>Please Choose Your Next Workout</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <RenderSelect grabWorkout={this.grabWorkout}/>
+              <form id="workout-picker" onSubmit={this.handleSubmit}>
+              <select className="form-select" role={'button'} aria-label="Default select example" value={this.state.selectedOption} onChange={this.handleChange} >
+                <option disabled value="">Open this select menu</option>
+                {
+                  this.state.workoutList.map(workout => (
+                    <option key={workout.workoutId} value={workout.workoutId}>{workout.name}</option>
+                  ))
+                }
+              </select>
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => { this.handleClose(); this.props.appendWorkoutListProp(this.state.workoutName); }}>
+            <Button form="workout-picker" variant="primary" type="submit">
               Add Workout
             </Button>
           </Modal.Footer>
