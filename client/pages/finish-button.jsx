@@ -23,6 +23,7 @@ export default class FinishButton extends React.Component {
 
   handleClose() {
     this.setState({ modalShow: false });
+    this.setState({ sessionName: '' });
   }
 
   handleNameChange(e) {
@@ -51,6 +52,7 @@ export default class FinishButton extends React.Component {
             <Modal.Header closeButton>
             <Modal.Title className={'w-100'}>
               <form id="session-name" onSubmit={this.handleSubmit}>
+              {/* <form id="session-name"> */}
                 <label htmlFor="exampleFormControlInput1" className="form-label">Finished workout?</label>
                 <input value={this.state.sessionName} onChange={this.handleNameChange} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Add a workout name" />
               </form>
@@ -61,6 +63,7 @@ export default class FinishButton extends React.Component {
                 Close
               </Button>
               <Button form="session-name" variant="primary" type="submit">
+              {/* <Button href='#' target="_blank" variant="primary" onClick={this.handleSubmit}> */}
                 Finish
               </Button>
             </Modal.Footer>

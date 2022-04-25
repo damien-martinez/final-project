@@ -2,6 +2,7 @@ import React from 'react';
 import parseRoute from './lib/parse-route';
 import WorkoutSession from './pages/workout-session';
 import Home from './pages/home';
+import Profile from './pages/profile';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -24,14 +25,16 @@ export default class App extends React.Component {
     const { route } = this.state;
     if (route === '') {
       return <Home />;
-    }
-    if (route.path === 'workout-session') {
+    } else if (route === 'workout-session') {
       return <WorkoutSession/>;
+    } else if (route === 'profile') {
+      return <Profile />;
     }
 
   }
 
   render() {
+
     return (
     <>
       {this.renderPage()}

@@ -20,6 +20,7 @@ export default class WorkoutSession extends React.Component {
     this.postRequest = this.postRequest.bind(this);
     this.click = this.click.bind(this);
     this.renderPlayOrPause = this.renderPlayOrPause.bind(this);
+    this.clickCancel = this.clickCancel.bind(this);
 
   }
 
@@ -104,16 +105,9 @@ export default class WorkoutSession extends React.Component {
 
     this.setState({ workouts: [] });
     clearInterval(this.state.timerId);
-    this.setState({ timerOn: !this.state.timerId });
-    this.setState({ seconds: 0 });
-
-    const mountTimerId = setInterval(() => {
-      this.setState({ seconds: this.state.seconds + 1 });
-
-    }, 1000);
-
-    this.setState({ timerId: mountTimerId });
     this.setState({ timerOn: !this.state.timerOn });
+    this.setState({ seconds: 0 });
+    window.location.hash = '#';
 
   }
 
@@ -148,6 +142,13 @@ export default class WorkoutSession extends React.Component {
     }
   }
 
+  clickCancel() {
+    this.setState({ workouts: [] });
+    clearInterval(this.state.timerId);
+    this.setState({ timerOn: !this.state.timerOn });
+    this.setState({ seconds: 0 });
+  }
+
   render() {
     let seconds = 0;
     let minutes = 0;
@@ -170,7 +171,7 @@ export default class WorkoutSession extends React.Component {
       <div className='container-fluid'>
         <div className='row justify-content-between mt-3'>
           <div className='mt-4 col-6'>
-            <h1>Workout Session</h1>
+            <h1 className='display-3'>Workout Session</h1>
           </div>
 
             <div className='col-6'>
@@ -181,7 +182,7 @@ export default class WorkoutSession extends React.Component {
               </div>
               <div className='d-flex justify-content-end'>
                   <FinishButton postRequest={this.postRequest} />
-                  <button type='button' className='btn btn-primary btn-md ms-4'>Cancel</button>
+                  <a href='#' onClick={this.clickCancel} type='button' className='btn btn-primary btn-md ms-4'>Cancel</a>
               </div>
           </div>
         </div>
