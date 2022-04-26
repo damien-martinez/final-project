@@ -20,8 +20,9 @@ export default class Profile extends React.Component {
             </div>
           </div>
         </div>
-        <div>
-          <BarChart />
+        <div className='row h-50'>
+            <BarChart height={'2%'} width={'2%'}
+              options={{ maintainAspectRatio: false }} />
         </div>
       </div>
     </>
