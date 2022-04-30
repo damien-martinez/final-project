@@ -35,6 +35,19 @@ app.get('/api/get-workouts', (req, res, next) => {
 
 });
 
+app.get('/api/get-sessions', (req, res, next) => {
+  const sql = `
+  select "createdAt"
+  from "session"
+  `;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+
+});
+
 app.post('/api/add-session-and-session-workout-data', (req, res, next) => {
   const { name, durationInMinutes, userId } = req.body.session;
 

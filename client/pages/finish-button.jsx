@@ -23,6 +23,7 @@ export default class FinishButton extends React.Component {
 
   handleClose() {
     this.setState({ modalShow: false });
+    this.setState({ sessionName: '' });
   }
 
   handleNameChange(e) {
