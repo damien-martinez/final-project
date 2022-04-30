@@ -79,7 +79,7 @@ export default class BarChart extends React.Component {
           <Bar data={data}
           options={{
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             ticks: { precision: 0 }
           }} />
     </div>
