@@ -75,9 +75,14 @@ export default class BarChart extends React.Component {
 
     return (
     <>
-
-    <Bar data={data} />
-
+    <div className='row m-3'>
+          <Bar data={data}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            ticks: { precision: 0 }
+          }} />
+    </div>
       </>
     );
   }
