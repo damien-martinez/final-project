@@ -1,4 +1,3 @@
-// import 'bootstrap/dist/css/bootstrap.min.css';
 require('dotenv/config');
 const format = require('pg-format');
 const pg = require('pg');
@@ -21,6 +20,30 @@ const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.use(staticMiddleware);
+
+app.get('/api/get-exercise/:workoutId', (req, res, next) => {
+  const workoutId = Number(req.params.workoutId);
+  if (!workoutId) {
+    throw new ClientError(400, 'Please use a positive integer for workoutID');
+  }
+
+  const sql = `
+  select "sessionWorkouts"."sessionId", "sessionWorkouts"."workoutId",
+         "sessionWorkouts"."reps", "sessionWorkouts"."set",
+         "sessionWorkouts"."weight", "session"."createdAt"
+  from "sessionWorkouts"
+  join "session" using ("sessionId")
+  where "sessionWorkouts"."workoutId" = $1`;
+  const params = [workoutId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find product with worId ${workoutId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
 
 app.get('/api/get-workouts', (req, res, next) => {
   const sql = `
