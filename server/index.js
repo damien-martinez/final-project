@@ -38,9 +38,10 @@ app.get('/api/get-exercise/:workoutId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       if (!result.rows[0]) {
-        throw new ClientError(404, `cannot find product with worId ${workoutId}`);
+        throw new ClientError(404, 'No data for this workout');
       }
-      res.json(result.rows[0]);
+
+      res.json(result.rows);
     })
     .catch(err => next(err));
 });
