@@ -1,6 +1,6 @@
 import React from 'react';
-
 import BarChart from './bar-chart';
+import LineChart from './line-chart';
 
 export default class Profile extends React.Component {
 
@@ -21,6 +21,7 @@ export default class Profile extends React.Component {
           </div>
         </div>
             <BarChart />
+            <LineChart />
 
       </div>
     </>

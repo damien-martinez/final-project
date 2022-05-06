@@ -1,7 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-// eslint-disable-next-line no-unused-vars
-import { Chart as ChartJS } from 'chart.js/auto';
+import 'chart.js/auto';
 import startOfWeek from 'date-fns/startOfWeek';
 import format from 'date-fns/format';
 
@@ -10,9 +9,12 @@ export default class BarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sessions: null
+      sessions: null,
+      formattedSessionsData: null
 
     };
+
+    this.formatSessionData = this.formatSessionData.bind(this);
 
   }
 
@@ -27,20 +29,22 @@ export default class BarChart extends React.Component {
           newData.push(data[i].createdAt);
         }
         this.setState({ sessions: newData });
+        this.formatSessionData(newData);
       });
 
   }
 
-  render() {
+  formatSessionData(sessions) {
+
     const dates = [];
     const formattedDates = [];
 
-    for (const prop in this.state.sessions) {
-      dates.push(this.state.sessions[prop]);
+    for (const prop in sessions) {
+      dates.push(sessions[prop]);
     }
 
     for (let i = 0; i < dates.length; i++) {
-      const result = startOfWeek(new Date(this.state.sessions[i]));
+      const result = startOfWeek(new Date(sessions[i]));
       formattedDates.push(format(result, 'MM/dd/yyyy'));
     }
 
@@ -67,23 +71,30 @@ export default class BarChart extends React.Component {
     const data = {
       labels: labelData,
       datasets: [{
-        label: 'Workout Sessions Per Week',
         data: chartData,
         backgroundColor: usedColors
       }]
     };
 
+    this.setState({ formattedSessionsData: data });
+
+  }
+
+  render() {
+
     return (
     <>
-    <div className='row m-3'>
-          <Bar data={data}
-          options={{
-            responsive: true,
-            maintainAspectRatio: true,
-            ticks: { precision: 0 }
-          }} />
-    </div>
-      </>
+      <div className='row m-3'>
+        <h4>Workouts Per Week</h4>
+          {this.state.formattedSessionsData !== null && <Bar data={this.state.formattedSessionsData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: true,
+              ticks: { precision: 0 },
+              plugins: { legend: { display: false } }
+            }} />}
+      </div>
+    </>
     );
   }
 }
