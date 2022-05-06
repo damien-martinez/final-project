@@ -34,7 +34,10 @@ export default class Workout extends React.Component {
   render() {
     return (
       <>
-        <h4 className='mt-2 mb-2'>{this.props.workout.exercise.name}</h4>
+        <div className='d-flex'>
+        <h4 className='mt-2 mb-2 d-inline'>{this.props.workout.exercise.name}</h4>
+        <button type='button' className='btn btn-link'><i className="bi bi-x-circle-fill"></i></button>
+        </div>
         {
           this.props.workout.sets.map((set, index) => (
             <WorkoutSet key={index} index={index} set={set} onSetUpdated={this.handleSetUpdated} />
