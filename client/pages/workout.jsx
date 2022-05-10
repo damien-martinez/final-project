@@ -49,8 +49,8 @@ export default class Workout extends React.Component {
     return (
       <>
         <div className='d-flex'>
-        <h4 className='mt-2 mb-2 d-inline'>{this.props.workout.exercise.name}</h4>
-        <button type='button' onClick={() => this.props.removeExercise(this.props.index)} className='btn btn-link'><i className="bi bi-x-circle-fill"></i></button>
+          <h4 className='mt-2 mb-2 d-inline'>{this.props.workout.exercise.name}</h4>
+          <button type='button' onClick={() => this.props.removeExercise(this.props.index)} className='btn btn-link'><i className="bi bi-x-circle-fill"></i></button>
         </div>
         {
           this.props.workout.sets.map((set, index) => (
