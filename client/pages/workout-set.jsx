@@ -9,6 +9,8 @@ export default class WorkSet extends React.Component {
     };
     this.handleWeightChange = this.handleWeightChange.bind(this);
     this.handleRepsChange = this.handleRepsChange.bind(this);
+    this.test = this.test.bind(this);
+    // console.log('constructor');
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -27,7 +29,15 @@ export default class WorkSet extends React.Component {
     this.setState({ reps: e.target.value });
   }
 
+  test() {
+    this.setState({ weight: this.props.set.weight });
+  }
+
   render() {
+    if (this.state.weight !== this.props.set.weight) {
+      this.test();
+    }
+
     return (
       <>
       <div className="mt-3 row">
