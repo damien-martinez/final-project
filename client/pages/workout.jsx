@@ -10,16 +10,13 @@ export default class Workout extends React.Component {
   }
 
   removeSet(index) {
-    // console.log(this.props.workout.sets.slice(), 'OG copy');
 
     const setsCopy = this.props.workout.sets.slice();
 
     setsCopy.splice(index, 1);
-    // console.log('spliced', setsCopy);
 
     const workoutCopy = Object.assign({}, this.props.workout);
     workoutCopy.sets = setsCopy;
-    // console.log(workoutCopy, 'new workout copy');
 
     this.props.onWorkoutUpdated(this.props.index, workoutCopy);
 
