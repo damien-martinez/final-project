@@ -6,6 +6,20 @@ export default class Workout extends React.Component {
     super(props);
     this.handleAddSet = this.handleAddSet.bind(this);
     this.handleSetUpdated = this.handleSetUpdated.bind(this);
+    this.removeSet = this.removeSet.bind(this);
+  }
+
+  removeSet(index) {
+
+    const setsCopy = this.props.workout.sets.slice();
+
+    setsCopy.splice(index, 1);
+
+    const workoutCopy = Object.assign({}, this.props.workout);
+    workoutCopy.sets = setsCopy;
+
+    this.props.onWorkoutUpdated(this.props.index, workoutCopy);
+
   }
 
   handleSetUpdated(index, setData) {
@@ -34,10 +48,13 @@ export default class Workout extends React.Component {
   render() {
     return (
       <>
-        <h4 className='mt-2 mb-2'>{this.props.workout.exercise.name}</h4>
+        <div className='d-flex'>
+          <h4 className='mt-2 mb-2 d-inline'>{this.props.workout.exercise.name}</h4>
+          <button type='button' onClick={() => this.props.removeExercise(this.props.index)} className='btn btn-link'><i className="bi bi-x-circle-fill"></i></button>
+        </div>
         {
           this.props.workout.sets.map((set, index) => (
-            <WorkoutSet key={index} index={index} set={set} onSetUpdated={this.handleSetUpdated} />
+            <WorkoutSet key={index} index={index} set={set} removeSet={this.removeSet} onSetUpdated={this.handleSetUpdated} />
           ))
         }
 

@@ -21,6 +21,7 @@ export default class WorkoutSession extends React.Component {
     this.click = this.click.bind(this);
     this.renderPlayOrPause = this.renderPlayOrPause.bind(this);
     this.clickCancel = this.clickCancel.bind(this);
+    this.removeExercise = this.removeExercise.bind(this);
 
   }
 
@@ -149,6 +150,14 @@ export default class WorkoutSession extends React.Component {
     this.setState({ seconds: 0 });
   }
 
+  removeExercise(index) {
+
+    const workoutsCopy = this.state.workouts.slice();
+    workoutsCopy.splice(index, 1);
+    this.setState({ workouts: workoutsCopy });
+
+  }
+
   render() {
     let seconds = 0;
     let minutes = 0;
@@ -188,7 +197,7 @@ export default class WorkoutSession extends React.Component {
         </div>
           {
             this.state.workouts.map((workout, index) => (
-              <Workout key={index} index={index} workout={workout} onWorkoutUpdated={this.handleWorkoutUpdated} />
+              <Workout key={index} index={index} workout={workout} removeExercise={this.removeExercise} onWorkoutUpdated={this.handleWorkoutUpdated} />
             ))
           }
           <ModalButton onSelection={this.addWorkout} />

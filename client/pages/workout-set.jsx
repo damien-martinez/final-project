@@ -9,6 +9,7 @@ export default class WorkSet extends React.Component {
     };
     this.handleWeightChange = this.handleWeightChange.bind(this);
     this.handleRepsChange = this.handleRepsChange.bind(this);
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -28,13 +29,13 @@ export default class WorkSet extends React.Component {
   }
 
   render() {
+
     return (
       <>
-      <div className="mt-3 row">
-        <div className='col-2 d-flex h6'>
-            <label htmlFor="exampleFormControlInput1" className="form-label pe-2">Set: </label>
-            <p>{this.props.index + 1}</p>
-        </div>
+        <div className='mt-3 col-2 d-flex'>
+          <h4 className="pe-2 mt-2 mb-2 d-inline">Set: </h4>
+          <h4 className='mt-2 mb-2 d-inline'>{this.props.index + 1}</h4>
+            <button type='button' onClick={() => this.props.removeSet(this.props.index)} className='btn btn-link d-inline'><i className="bi bi-x-circle-fill"></i></button>
         </div>
         <div className='row'>
           <div className="col-6">
